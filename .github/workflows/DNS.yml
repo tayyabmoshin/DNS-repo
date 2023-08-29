@@ -1,4 +1,4 @@
-name: Create DNS Record
+name: Manage DNS Records
 
 on:
   workflow_dispatch:  # Manually trigger the workflow
@@ -7,25 +7,38 @@ jobs:
   create-dns-record:
     runs-on: ubuntu-latest
     steps:
-    - name: Create DNS Record
-      run: |
-        CF_API_TOKEN="${{ secrets.API_TOKEN }}"
-        ZONE_ID="38b42bfdb42dbe301b6b1a27b86ac939"  # Replace with your Cloudflare Zone ID 
-        
-        RECORD_NAME="karazo123.karazo.com"
-        RECORD_TYPE="cname"
-        RECORD_CONTENT="tayyabmoshin.github.io/new-pipe/"
-        TTL=3600
-        
-        API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
-        
-        curl -X POST "$API_URL" \
-          -H "Authorization: Bearer $CF_API_TOKEN" \
-          -H "Content-Type: application/json" \
-          --data "{
-            \"type\": \"$RECORD_TYPE\",
-            \"name\": \"$RECORD_NAME\",
-            \"content\": \"$RECORD_CONTENT\",
-            \"ttl\": $TTL
-          }"
-        echo "DNS record created."
+      - name: Create DNS Record
+        run: |
+          CF_API_TOKEN="${{ secrets.API_TOKEN }}"
+          ZONE_ID="38b42bfdb42dbe301b6b1a27b86ac939"  # Replace with your Cloudflare Zone ID 
+          
+          RECORD_NAME="karazo123.karazo.com"
+          RECORD_TYPE="cname"
+          RECORD_CONTENT="tayyabmoshin.github.io/new-pipe/"
+          TTL=3600
+          
+          API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
+          
+          curl -X POST "$API_URL" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data "{
+              \"type\": \"$RECORD_TYPE\",
+              \"name\": \"$RECORD_NAME\",
+              \"content\": \"$RECORD_CONTENT\",
+              \"ttl\": $TTL
+            }"
+          echo "DNS record created."
+
+  list-dns-records:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List DNS Records
+        run: |
+          CF_API_TOKEN="${{ secrets.API_TOKEN }}"
+          ZONE_ID="38b42bfdb42dbe301b6b1a27b86ac939"  # Replace with your Cloudflare Zone ID 
+          
+          API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
+          
+          curl -X GET "$API_URL" \
+            -H "Authorization: Bearer $CF_API_TOKEN"
