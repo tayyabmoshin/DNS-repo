@@ -40,5 +40,8 @@ jobs:
           
           API_URL="https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records"
           
-          curl -X GET "$API_URL" \
-            -H "Authorization: Bearer $CF_API_TOKEN"
+          response=$(curl -X GET "$API_URL" \
+            -H "Authorization: Bearer $CF_API_TOKEN")
+          
+          # Use jq to make JSON response readable
+          echo "$response" | jq .
